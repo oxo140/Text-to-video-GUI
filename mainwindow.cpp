@@ -25,9 +25,24 @@ void MainWindow::on_pushButton_clicked()
 {
     QString text = ui->textEdit->toPlainText() ; // text pour la video
 
-    string texte = text.toStdString();
+    string texte = text.toStdString(); // conversion du text qstring en string
 
-      int vitesseDefilement = 4;
+    int vitesseDefilement;
+
+    if(ui->comboBox->currentText() == "Lent")
+    {
+         vitesseDefilement = 4;
+    }
+    else if (ui->comboBox->currentText() == "Normal")
+    {
+         vitesseDefilement = 8;
+    }
+    else if (ui->comboBox->currentText() == "Rapide")
+    {
+         vitesseDefilement = 12;
+    }
+
+
 
       int espaceEntreTexte = 12;
       int epaisseurPolice = 6;
@@ -92,4 +107,6 @@ void MainWindow::on_pushButton_clicked()
 
       video.release();
 }
+
+
 
