@@ -68,10 +68,15 @@ void MainWindow::on_pushButton_clicked()
       int fontFace = FONT_HERSHEY_TRIPLEX;
       double fontScale = 2.5;
 
+
+
       int largeurImage = 1280; //définiton horizontal ←→
-      int positionX = largeurImage;
       int hauteurImage = 180;    //définition vertical ↑↓
 
+      largeurImage = ui->textEdit_2->toPlainText().toInt();
+      hauteurImage = ui->textEdit_3->toPlainText().toInt();
+
+      int positionX = largeurImage;
       int fps = 60; // Images par seconde
 
 
@@ -128,6 +133,18 @@ void MainWindow::on_pushButton_clicked()
 
 
 void MainWindow::on_comboBox_2_activated(int index)
+{
+
+}
+
+
+void MainWindow::on_textEdit_2_copyAvailable(bool b)
+{
+
+}
+
+
+void MainWindow::on_textEdit_3_copyAvailable(bool b)
 {
 
 }
