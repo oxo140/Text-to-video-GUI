@@ -28,6 +28,9 @@ void MainWindow::on_pushButton_clicked()
     string texte = text.toStdString(); // conversion du text qstring en string
 
     int vitesseDefilement;
+    int introuge =0;
+    int intvert =0;
+    int intbleu =0;
 
     if(ui->comboBox->currentText() == "Lent")
     {
@@ -43,13 +46,26 @@ void MainWindow::on_pushButton_clicked()
     }
 
 
-
       int espaceEntreTexte = 12;
       int epaisseurPolice = 6;
 
-      Scalar couleurTexte(0, 0, 0); // couleur du text noir
 
-      int fontFace = FONT_HERSHEY_SIMPLEX;
+      if(ui->comboBox_2->currentText() == "Rouge")
+      {
+        introuge = 255;
+      }
+      if(ui->comboBox_2->currentText() == "Vert")
+      {
+        intvert = 255;
+      }
+      if(ui->comboBox_2->currentText() == "Bleu")
+      {
+        intbleu = 255;
+      }
+
+      Scalar couleurTexte(intbleu, intvert, introuge); // couleur du text noir
+
+      int fontFace = FONT_HERSHEY_TRIPLEX;
       double fontScale = 2.5;
 
       int largeurImage = 1280; //définiton horizontal ←→
@@ -75,8 +91,8 @@ void MainWindow::on_pushButton_clicked()
       }
 
 
+      Mat image(hauteurImage, largeurImage, CV_8UC3, Scalar(0, 0, 0)); // couleur du fond
 
-      Mat image(hauteurImage, largeurImage, CV_8UC3, Scalar(255, 255, 255)); // couleur du fond
 
       int texteLargeur = getTextSize(texte, fontFace, fontScale, epaisseurPolice, nullptr).width;
       int texteHauteur = getTextSize(texte, fontFace, fontScale, epaisseurPolice, nullptr).height;
@@ -109,4 +125,10 @@ void MainWindow::on_pushButton_clicked()
 }
 
 
+
+
+void MainWindow::on_comboBox_2_activated(int index)
+{
+
+}
 
