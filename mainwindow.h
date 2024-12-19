@@ -26,6 +26,10 @@ private slots:
 
     void on_textEdit_3_copyAvailable(bool b);
 
+    void on_textEdit_4_copyAvailable(bool b);
+
+    void on_comboBox_3_activated(int index);
+
 private:
     Ui::MainWindow *ui;
 };

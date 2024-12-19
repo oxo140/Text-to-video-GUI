@@ -4,6 +4,7 @@
 #include "iostream"
 #include <string>
 #include <QString>
+#include <QDebug>
 
 using namespace std;
 using namespace cv;
@@ -79,12 +80,19 @@ void MainWindow::on_pushButton_clicked()
       int positionX = largeurImage;
       int fps = 60; // Images par seconde
 
+      QString exten = ui->comboBox_3->currentText();
 
-      string nomdufichier = "test"; // nom du ficher de sortie
-      string extensionvideo = ".mp4"; // format du ficher de sortie
 
+      string extensionvideo = "." + exten.toStdString(); // format du ficher de sortie
+
+
+      QString nomdufich = ui->textEdit_4->toPlainText() ; // nom du ficher de sortie
+
+      string nomdufichier = nomdufich.toStdString(); // conversion du text qstring en string
 
       // création de la video
+
+
 
       nomdufichier.append(extensionvideo);
 
@@ -132,20 +140,4 @@ void MainWindow::on_pushButton_clicked()
 
 
 
-void MainWindow::on_comboBox_2_activated(int index)
-{
-
-}
-
-
-void MainWindow::on_textEdit_2_copyAvailable(bool b)
-{
-
-}
-
-
-void MainWindow::on_textEdit_3_copyAvailable(bool b)
-{
-
-}
 
