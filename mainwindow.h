@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMainWindow>
+#include <QtCore>
+#include <QtWidgets>
+#include <QtGui>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +34,8 @@ private slots:
     void on_textEdit_4_copyAvailable(bool b);
 
     void on_comboBox_3_activated(int index);
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;

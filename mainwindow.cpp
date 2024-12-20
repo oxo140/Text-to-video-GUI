@@ -1,10 +1,18 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "opencv2/opencv.hpp"
+#include <opencv2/video/video.hpp>
+#include <opencv2/videoio/videoio.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include "iostream"
 #include <string>
 #include <QString>
 #include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QDesktopServices>
+#include <QUrl>
 
 using namespace std;
 using namespace cv;
@@ -14,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->label_7->hide();
+    ui->label_8->hide();
+
+    ui->pushButton_2->hide();
 }
 
 MainWindow::~MainWindow()
@@ -24,120 +36,179 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    QString text = ui->textEdit->toPlainText() ; // text pour la video
+    // Chemin du répertoire
+    QString dirPath = "C:/textvideo";
 
-    string texte = text.toStdString(); // conversion du text qstring en string
+    // Vérifie si le répertoire existe
+    QFileInfo dirInfo(dirPath);
 
-    int vitesseDefilement;
+    if (!dirInfo.exists() || !dirInfo.isDir()) {
+        // Le répertoire n'existe pas, on le crée
+        QDir dir;
+        if (dir.mkpath(dirPath)) {
+            qDebug() << "Répertoire créé avec succès : " << dirPath;
+        } else {
+            qDebug() << "Échec de la création du répertoire : " << dirPath;
+        }
+    } else {
+        qDebug() << "Le répertoire existe déjà : " << dirPath;
+    }
+
+
+    QString text = ui->textEdit->toPlainText();
+    string texte = text.toStdString();
+    ui->label_7->hide();
+
+    int vitesseDefilement=0;
     int introuge =0;
     int intvert =0;
     int intbleu =0;
 
     if(ui->comboBox->currentText() == "Lent")
     {
-         vitesseDefilement = 4;
+        vitesseDefilement = 4;
     }
     else if (ui->comboBox->currentText() == "Normal")
     {
-         vitesseDefilement = 8;
+        vitesseDefilement = 8;
     }
     else if (ui->comboBox->currentText() == "Rapide")
     {
-         vitesseDefilement = 12;
+        vitesseDefilement = 12;
     }
 
-
-      int espaceEntreTexte = 12;
-      int epaisseurPolice = 6;
-
-
-      if(ui->comboBox_2->currentText() == "Rouge")
-      {
+    if(ui->comboBox_2->currentText() == "Rouge")
+    {
         introuge = 255;
-      }
-      if(ui->comboBox_2->currentText() == "Vert")
-      {
+    }
+    if(ui->comboBox_2->currentText() == "Vert")
+    {
         intvert = 255;
-      }
-      if(ui->comboBox_2->currentText() == "Bleu")
-      {
+    }
+    if(ui->comboBox_2->currentText() == "Bleu")
+    {
         intbleu = 255;
-      }
+    }
 
-      Scalar couleurTexte(intbleu, intvert, introuge); // couleur du text noir
-
-      int fontFace = FONT_HERSHEY_TRIPLEX;
-      double fontScale = 2.5;
+    Scalar couleurTexte(intbleu, intvert, introuge); // couleur du text noir
 
 
+    int largeurImage = ui->textEdit_2->toPlainText().toInt();
+    int hauteurImage = ui->textEdit_3->toPlainText().toInt();
+    if (largeurImage <= 0 || hauteurImage <= 0) {
+        std::cout << "Dimensions invalides !" << std::endl;
+        return;
+    }
 
-      int largeurImage = 1280; //définiton horizontal ←→
-      int hauteurImage = 180;    //définition vertical ↑↓
+    int fps = 60;
+    QString nomdufich = ui->textEdit_4->toPlainText();
 
-      largeurImage = ui->textEdit_2->toPlainText().toInt();
-      hauteurImage = ui->textEdit_3->toPlainText().toInt();
+    string nomdufichier = "C:\\textvideo\\" + nomdufich.toStdString() + ".avi";
 
-      int positionX = largeurImage;
-      int fps = 60; // Images par seconde
+    std::cout << "Nom du fichier : " << nomdufichier << std::endl;
 
-      QString exten = ui->comboBox_3->currentText();
+    VideoWriter video(nomdufichier, VideoWriter::fourcc('M', 'J', 'P', 'G'), fps, Size(largeurImage, hauteurImage));
+    if (!video.isOpened()) {
+        std::cout << "Impossible de créer la vidéo." << std::endl;
+        ui->label_8->show();
+        return;
+    }
+
+    Mat image(hauteurImage, largeurImage, CV_8UC3, Scalar(255, 255, 255));
+
+    int texteLargeur = getTextSize(texte, FONT_HERSHEY_TRIPLEX, 2.5, 6, nullptr).width;
+    int texteHauteur = getTextSize(texte, FONT_HERSHEY_TRIPLEX, 2.5, 6, nullptr).height;
+    int positionX = largeurImage, positionY = (hauteurImage + texteHauteur) / 2;
+
+    std::cout << "Largeur texte: " << texteLargeur << ", Hauteur texte: " << texteHauteur << std::endl;
+    std::cout << "Position texte X: " << positionX << ", Position texte Y: " << positionY << std::endl;
+
+    while (positionX + texteLargeur > 0) {
+        image.setTo(Scalar(255, 255, 255)); // Réinitialiser l'image à chaque itération
+        putText(image, texte, Point(positionX, positionY), FONT_HERSHEY_TRIPLEX, 2.5, couleurTexte, 6); // Ajouter le texte
+        video.write(image); // Ajouter l'image à la vidéo
+        positionX -= vitesseDefilement; // Déplacer le texte
+    }
+
+    // Ajouter 1 seconde de vidéo après le défilement du texte
+    int frameCount = fps; // Nombre de frames à ajouter (1 seconde à 60 fps)
+    for (int i = 0; i < frameCount; ++i) {
+        image.setTo(Scalar(255, 255, 255)); // Réinitialiser l'image (fond blanc)
+        video.write(image); // Ajouter l'image fixe à la vidéo
+
+        ui->label_7->hide();
+    }
+
+    video.release();
+    std::cout << "Vidéo créée avec succès !" << std::endl;
+
+    ui->pushButton_2->show();
+    ui->label_8->hide();
+    ui->label_7->show();
+    qDebug() << text;
+    qDebug() << texte;
 
 
-      string extensionvideo = "." + exten.toStdString(); // format du ficher de sortie
 
-
-      QString nomdufich = ui->textEdit_4->toPlainText() ; // nom du ficher de sortie
-
-      string nomdufichier = nomdufich.toStdString(); // conversion du text qstring en string
-
-      // création de la video
-
-
-
-      nomdufichier.append(extensionvideo);
-
-      VideoWriter video( nomdufichier, VideoWriter::fourcc('H', '2', '6', '4'), fps, Size(largeurImage, hauteurImage));
-
-      if (!video.isOpened())
-      {
-          cout << "Impossible de créer la vidéo." << endl;
-      }
-
-
-      Mat image(hauteurImage, largeurImage, CV_8UC3, Scalar(0, 0, 0)); // couleur du fond
-
-
-      int texteLargeur = getTextSize(texte, fontFace, fontScale, epaisseurPolice, nullptr).width;
-      int texteHauteur = getTextSize(texte, fontFace, fontScale, epaisseurPolice, nullptr).height;
-
-      int positionY = (hauteurImage + texteHauteur) / 2;
-
-      bool texteVisible = true;
-
-      while (texteVisible) // Algoritme pour que la longeur de la video face 1 defillement de droite vers la gauche.
-      {
-          image.setTo(Scalar(255, 255, 255)); // Effacer l'image précédente
-
-          putText(image, texte, Point(positionX, positionY), fontFace, fontScale, couleurTexte, epaisseurPolice);
-
-          video.write(image);
-
-          positionX -= vitesseDefilement;
-
-          int texteLargeur = getTextSize(texte, fontFace, fontScale, epaisseurPolice, nullptr).width;
-          if (positionX < -texteLargeur)
-          {
-              texteVisible = false;
-          }
-
-          if (waitKey(1) == 27)
-              break;
-      }
-
-      video.release();
 }
 
 
 
 
+
+
+void MainWindow::on_comboBox_2_activated(int index)
+{
+
+}
+
+
+void MainWindow::on_comboBox_3_activated(int index)
+{
+
+}
+
+
+void MainWindow::on_textEdit_2_copyAvailable(bool b)
+{
+
+}
+
+
+void MainWindow::on_textEdit_3_copyAvailable(bool b)
+{
+
+}
+
+
+void MainWindow::on_textEdit_4_copyAvailable(bool b)
+{
+
+}
+
+
+void MainWindow::on_comboBox_activated(int index)
+{
+
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+
+
+        QString dirPath = "C:/textvideo";
+
+        // Créer un objet QUrl avec le chemin du répertoire
+        QUrl url = QUrl::fromLocalFile(dirPath);
+
+        // Ouvrir le répertoire dans l'explorateur de fichiers
+        if (QDesktopServices::openUrl(url)) {
+            qDebug() << "Le répertoire a été ouvert avec succès : " << dirPath;
+        } else {
+            qDebug() << "Échec de l'ouverture du répertoire : " << dirPath;
+
+
+        }
+}
 
