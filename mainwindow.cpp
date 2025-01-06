@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->label_7->hide();
     ui->label_8->hide();
-
+    ui->pushButton_3->hide();
     ui->pushButton_2->hide();
 }
 
@@ -38,6 +38,7 @@ void MainWindow::on_pushButton_clicked()
 {
     // Chemin du répertoire
     QString dirPath = "C:/textvideo";
+
 
     // Vérifie si le répertoire existe
     QFileInfo dirInfo(dirPath);
@@ -103,6 +104,7 @@ void MainWindow::on_pushButton_clicked()
     int fps = 60;
     QString nomdufich = ui->textEdit_4->toPlainText();
 
+    string nomdufichierWebM = "C:\\textvideo\\" + nomdufich.toStdString() + ".webm";
     string nomdufichier = "C:\\textvideo\\" + nomdufich.toStdString() + ".avi";
 
     std::cout << "Nom du fichier : " << nomdufichier << std::endl;
@@ -142,6 +144,27 @@ void MainWindow::on_pushButton_clicked()
     video.release();
     std::cout << "Vidéo créée avec succès !" << std::endl;
 
+
+    std::string commandeFFmpeg = "ffmpeg -y -i \"" + nomdufichier + "\" -c:v libvpx-vp9 -b:v 2M \"" + nomdufichierWebM + "\"";
+    std::cout << "Conversion en WebM..." << std::endl;
+    int resultat = system(commandeFFmpeg.c_str());
+
+    if (resultat == 0) {
+        std::cout << "Conversion réussie ! Fichier WebM : " << nomdufichierWebM << std::endl;
+
+        // Suppression du fichier AVI
+        try {
+            if (std::filesystem::remove(nomdufichier)) {
+                std::cout << "Fichier AVI supprimé : " << nomdufichier << std::endl;
+            } else {
+                std::cout << "Impossible de supprimer le fichier AVI." << std::endl;
+            }
+        } catch (const std::filesystem::filesystem_error& e) {
+            std::cout << "Erreur lors de la suppression du fichier AVI : " << e.what() << std::endl;
+        }
+    } else {
+        std::cout << "Erreur lors de la conversion en WebM. Le fichier AVI n'a pas été supprimé." << std::endl;
+    }
     ui->pushButton_2->show();
     ui->label_8->hide();
     ui->label_7->show();
@@ -210,5 +233,11 @@ void MainWindow::on_pushButton_2_clicked()
 
 
         }
+}
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+
 }
 
