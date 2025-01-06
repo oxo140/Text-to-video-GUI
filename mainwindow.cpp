@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->label_8->hide();
     ui->pushButton_3->hide();
     ui->pushButton_2->hide();
+    ui->pushButton_4->hide();
 }
 
 MainWindow::~MainWindow()
@@ -166,6 +167,7 @@ void MainWindow::on_pushButton_clicked()
         std::cout << "Erreur lors de la conversion en WebM. Le fichier AVI n'a pas été supprimé." << std::endl;
     }
     ui->pushButton_2->show();
+    ui->pushButton_4->show();
     ui->label_8->hide();
     ui->label_7->show();
     qDebug() << text;
@@ -233,11 +235,33 @@ void MainWindow::on_pushButton_2_clicked()
 
 
         }
+
+
+
+
+
 }
 
 
 void MainWindow::on_pushButton_3_clicked()
 {
 
+}
+
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    QString nomdufich = ui->textEdit_4->toPlainText();
+
+    // Construire le chemin complet du fichier avec l'extension .webm
+    QString nomdufichierWebM = "C:\\textvideo\\" + nomdufich + ".webm";
+
+    // Vérifier si le fichier existe avant d'essayer de l'ouvrir
+    if (QFile::exists(nomdufichierWebM)) {
+        // Utiliser QProcess pour ouvrir le fichier avec l'application par défaut
+        QProcess::startDetached("explorer", QStringList() << nomdufichierWebM);
+    } else {
+        qDebug() << "Le fichier n'existe pas à l'emplacement spécifié : " << nomdufichierWebM;
+    }
 }
 
