@@ -216,12 +216,21 @@ void MainWindow::on_pushButton_clicked()
                 std::cout << "Fichier AVI supprimé : " << nomdufichier << std::endl;
             } else {
                 std::cout << "Impossible de supprimer le fichier AVI." << std::endl;
+                QMessageBox::critical(this, "Erreur", "Vérifier si FFMPEG est installé.");
+
+                return;
             }
         } catch (const std::filesystem::filesystem_error& e) {
             std::cout << "Erreur lors de la suppression du fichier AVI : " << e.what() << std::endl;
+            QMessageBox::critical(this, "Erreur", "Vérifier si FFMPEG est installé.");
+
+            return;
         }
     } else {
         std::cout << "Erreur lors de la conversion en WebM. Le fichier AVI n'a pas été supprimé." << std::endl;
+        QMessageBox::critical(this, "Erreur", "Vérifier si FFMPEG est installé.");
+
+        return;
     }
     ui->pushButton_2->show();
     ui->pushButton_4->show();
