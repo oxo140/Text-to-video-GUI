@@ -1,15 +1,11 @@
-Text-to-video-GUI ✔️
+**Text-to-Video GUI ✔️**
 
-🎥 Cette application a pour objectif de créer un fichier vidéo au format MP4 à partir d'une entrée textuelle fournie dans l'application.
+🎥 Cette application permet de créer un fichier vidéo au format MP4 à partir d'un texte fourni dans l'application.
 
-instruction :
+**Instructions :**
 
-Télécharger et copier le contenue de larchive (fichier dll) dans C:\Windows\System32.
-
-Télécharger et installer FFMPEG
-
-Télécharger l'application :
-
-https://drive.google.com/file/d/1YfCEUuO5Y7ao1p5ZFgOjhzunUFIt_jmB/view?usp=sharing
-
-Extraire release.zip et ouvrer graphique1.exe
+1. Téléchargez et copiez le contenu de l'archive (fichier DLL) dans le dossier `C:\Windows\System32`.
+2. Téléchargez et installez **FFMPEG**.
+3. Téléchargez l'application depuis le lien suivant :  
+   [Télécharger l'application](https://drive.google.com/file/d/1YfCEUuO5Y7ao1p5ZFgOjhzunUFIt_jmB/view?usp=sharing)
+4. Extrayez `release.zip` et ouvrez le fichier `graphique1.exe`.
