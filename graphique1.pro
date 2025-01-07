@@ -1,6 +1,7 @@
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+RC_FILE += resources.rc
 
 CONFIG += c++17
 
@@ -33,4 +34,7 @@ win32: LIBS += -L$$PWD/../../../../Qt/OpenCV-MinGW-Build-OpenCV-4.5.5-x64/x64/mi
 
 INCLUDEPATH += $$PWD/../../../../Qt/OpenCV-MinGW-Build-OpenCV-4.5.5-x64/include
 DEPENDPATH += $$PWD/../../../../Qt/OpenCV-MinGW-Build-OpenCV-4.5.5-x64/include
+
+DISTFILES += \
+    resources.rc
 

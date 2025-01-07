@@ -24,9 +24,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->label_7->hide();
     ui->label_8->hide();
-    ui->pushButton_3->hide();
     ui->pushButton_2->hide();
     ui->pushButton_4->hide();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -37,6 +38,56 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
+
+
+    if (ui->textEdit->toPlainText().trimmed().isEmpty()) {
+        // Met le QTextEdit en rouge
+        ui->textEdit->setStyleSheet("background-color: red;");
+
+        // Affiche un message d'erreur
+        QMessageBox::critical(this, "Erreur", "Le champ de texte est vide.");
+        if (ui->textEdit_4->toPlainText().trimmed().isEmpty()) {
+            // Met le QTextEdit en rouge
+            ui->textEdit_4->setStyleSheet("background-color: red;");
+
+            // Affiche un message d'erreur
+            QMessageBox::critical(this, "Erreur", "Le champ de nom du fichier est vide.");
+            return;
+
+        } else {
+            // Réinitialise le style du QTextEdit
+            ui->textEdit_4->setStyleSheet("");
+
+
+        } // champ de nom du fichier vide
+        return;
+
+    } else {
+        // Réinitialise le style du QTextEdit
+        ui->textEdit->setStyleSheet("");
+
+
+    } //champ de texte vide
+
+    if (ui->textEdit_4->toPlainText().trimmed().isEmpty()) {
+        // Met le QTextEdit en rouge
+        ui->textEdit_4->setStyleSheet("background-color: red;");
+
+        // Affiche un message d'erreur
+        QMessageBox::critical(this, "Erreur", "Le champ de nom du fichier est vide.");
+        return;
+
+    } else {
+        // Réinitialise le style du QTextEdit
+        ui->textEdit_4->setStyleSheet("");
+
+
+    } // champ de nom du fichier vide
+
+
+    ui->textEdit->setStyleSheet("");
+
+    ui->textEdit_4->setStyleSheet("");
     // Chemin du répertoire
     QString dirPath = "C:/textvideo";
 
@@ -112,10 +163,16 @@ void MainWindow::on_pushButton_clicked()
 
     VideoWriter video(nomdufichier, VideoWriter::fourcc('M', 'J', 'P', 'G'), fps, Size(largeurImage, hauteurImage));
     if (!video.isOpened()) {
+
         std::cout << "Impossible de créer la vidéo." << std::endl;
         ui->label_8->show();
+
+        QMessageBox::critical(this, "Erreur", "Vérifier si FFMPEG est installé.");
+
         return;
-    }
+
+        }
+
 
     Mat image(hauteurImage, largeurImage, CV_8UC3, Scalar(255, 255, 255));
 
@@ -168,8 +225,8 @@ void MainWindow::on_pushButton_clicked()
     }
     ui->pushButton_2->show();
     ui->pushButton_4->show();
-    ui->label_8->hide();
     ui->label_7->show();
+    ui->label_8->hide();
     qDebug() << text;
     qDebug() << texte;
 
@@ -263,5 +320,31 @@ void MainWindow::on_pushButton_4_clicked()
     } else {
         qDebug() << "Le fichier n'existe pas à l'emplacement spécifié : " << nomdufichierWebM;
     }
+}
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+
+
+
+
+}
+
+
+void MainWindow::on_textEdit_textChanged()
+{
+    ui->pushButton_2->hide();
+    ui->pushButton_4->hide();
+    ui->label_7->hide();
+}
+
+
+void MainWindow::on_textEdit_4_textChanged()
+{
+    ui->pushButton_2->hide();
+    ui->pushButton_4->hide();
+    ui->label_7->hide();
+
 }
 
