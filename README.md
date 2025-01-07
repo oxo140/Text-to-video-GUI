@@ -1,4 +1,3 @@
-
 Text-to-video-GUI ✔️
 
-🎥 Cette Application a pour objectif de crée un fichier video mp4 grace a une entrer text dans l'application.
+🎥 Cette application a pour objectif de créer un fichier vidéo au format MP4 à partir d'une entrée textuelle fournie dans l'application.
