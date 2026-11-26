@@ -1,0 +1,9 @@
+/target/
+/exports/
+/dist/
+/Text-Video-Studio-Windows.zip
+*.partial
+/Text-Video-Studio-GUI.exe
+/Text-Video-Studio-CMD.exe
+/SHA256SUMS.txt
+

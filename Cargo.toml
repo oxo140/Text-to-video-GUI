@@ -1,0 +1,38 @@
+[package]
+name = "text-video-studio"
+version = "0.3.0"
+edition = "2021"
+description = "Création de texte vidéo : interfaces graphique et console"
+
+[features]
+default = ["gui"]
+gui = ["dep:eframe", "dep:rfd"]
+
+[[bin]]
+name = "text-video-studio"
+path = "src/main.rs"
+required-features = ["gui"]
+
+[[bin]]
+name = "text-video-cmd"
+path = "src/bin/cmd.rs"
+
+[dependencies]
+eframe = { version = "=0.29.1", optional = true, default-features = false, features = ["default_fonts", "glow", "persistence", "x11", "wayland"] }
+epaint_default_fonts = "=0.29.1"
+fontdue = "0.9"
+rfd = { version = "0.15", optional = true }
+serde = { version = "1", features = ["derive"] }
+tempfile = "3"
+clap = { version = "4", features = ["derive"] }
+ctrlc = "3"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+semver = "1"
+serde_json = "1"
+sha2 = "0.10"
+self-replace = "1.5"
+
+[profile.release]
+lto = "thin"
+strip = true
+
