@@ -406,25 +406,6 @@ impl eframe::App for Studio {
                         );
                     });
                 });
-                ui.add_space(10.0);
-                let (rect, _) = ui.allocate_exact_size(Vec2::new(72.0, 3.0), egui::Sense::hover());
-                for (index, color) in [
-                    Color32::from_rgb(32, 86, 169),
-                    Color32::WHITE,
-                    Color32::from_rgb(217, 54, 65),
-                ]
-                .into_iter()
-                .enumerate()
-                {
-                    ui.painter().rect_filled(
-                        egui::Rect::from_min_size(
-                            rect.min + Vec2::new(index as f32 * 24.0, 0.0),
-                            Vec2::new(24.0, 3.0),
-                        ),
-                        0.0,
-                        color,
-                    );
-                }
             });
         egui::TopBottomPanel::bottom("footer")
             .frame(

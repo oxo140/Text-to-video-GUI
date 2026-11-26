@@ -3401,7 +3401,7 @@ dependencies = [
 
 [[package]]
 name = "text-video-studio"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "clap",
  "ctrlc",
